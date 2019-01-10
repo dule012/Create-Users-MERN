@@ -26,8 +26,8 @@ app.use(cors())
 
 
 
-app.get('/', (req, res) => {
-    res.json([1, 2, 3])
+app.post('/newuser', (req, res) => {
+    
 })
 
 app.listen(4000, () => {

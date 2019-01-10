@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
-import Table from './table/table'
+import Home from './home/home'
 import NewUser from './newUser/newUser'
 import Header from './partials/header'
 
@@ -12,7 +12,7 @@ class App extends Component {
         <Header />
         <Switch>
           <Route path='/newUser' component={NewUser} />
-          <Route path='/' component={Table} />
+          <Route path='/' component={Home} />
         </Switch>
       </React.Fragment>
     )

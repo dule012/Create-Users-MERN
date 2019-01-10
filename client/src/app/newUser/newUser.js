@@ -6,7 +6,12 @@ import { connect } from 'react-redux';
 class NewUser extends Component {
 
     submit = () => {
-        this.props.saveUser(1, 2, 3, 4, 5)
+        const firstName = this.props.firstNameValue
+        const lastName = this.props.lastNameValue
+        const phoneNumber = parseInt(this.props.phoneNumberValue)
+        const city = this.props.cityValue
+        const address = this.props.addressValue
+        this.props.saveUser(firstName, lastName, phoneNumber, city, address)
         console.log(this.props)
     }
     typing = (e) => {
@@ -35,15 +40,11 @@ class NewUser extends Component {
 
 
 const mapDispatchToProps = (dispatch) => ({
-    saveUser: (a, b, c, d, e) => { dispatch(saveUser(a, b, c, d, e)) },
+    saveUser: (firstName, lastName, phoneNumber, city, address) => { dispatch(saveUser(firstName, lastName, phoneNumber, city, address)) },
     changeInputValue: (key, value) => { dispatch(changeInputValue(key, value)) }
 })
 const mapStateToProps = (state) => ({ ...state })
-// firstNameValue: state.firstNameValue,
-// lastNameValue: state.lastNameValue,
-// phoneNumberValue: state.phoneNumberValue,
-// cityValue: state.cityValue,
-// addressValue: state.addressValue
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewUser)
