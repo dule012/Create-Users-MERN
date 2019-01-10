@@ -1,7 +1,8 @@
+const mongoose = require('mongoose')
 const mongooseSchema = require('mongoose').Schema
 
 const userSchema = new mongooseSchema({
-    idUser: {
+    idOfUser: {
         type: Number,
         unique: true
     },
@@ -12,7 +13,7 @@ const userSchema = new mongooseSchema({
         type: String
     },
     phoneNumber: {
-        type: Number
+        type: String
     },
     city: {
         type: String
@@ -23,4 +24,4 @@ const userSchema = new mongooseSchema({
 })
 
 const User = mongoose.model('User', userSchema)
-export default User
+module.exports = User

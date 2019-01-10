@@ -1,7 +1,6 @@
 
 export const initialState = {
     arrOfUsers: [],
-    idOfUser: 1,
     firstNameValue: '',
     lastNameValue: '',
     phoneNumberValue: '',
@@ -12,8 +11,7 @@ export const initialState = {
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'save_user':
-            console.log('reducer')
-            return { ...state, arrOfUsers: [...state.arrOfUsers, [state.idOfUser++, ...action.payload]] };
+            return { ...state, arrOfUsers: [...state.arrOfUsers, action.payload] };
         case 'firstName':
             return { ...state, firstNameValue: action.payload };
         case 'lastName':
@@ -24,6 +22,8 @@ export const reducer = (state = initialState, action) => {
             return { ...state, cityValue: action.payload };
         case 'address':
             return { ...state, addressValue: action.payload };
+        case 'reset_inputs':
+            return { ...state, firstNameValue: '', lastNameValue: '', phoneNumberValue: '', cityValue: '', addressValue: '' }
         default:
             return state;
     }

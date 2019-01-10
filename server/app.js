@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const mongodb = require('mongodb').MongoClient;
 const cors = require('cors')
+const User = require('./models/userModel.js')
 
 
 mongoose.connect('mongodb://localhost:27017', (err) => {
@@ -17,17 +18,28 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors())
 
-// app.all('*', function (req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
-//     next();
-// });
 
 
 
+
+let idOfUser = 0
 app.post('/newuser', (req, res) => {
-    
+    const { firstName, lastName, phoneNumber, city, address } = req.body
+    const newUser = new User({
+        idOfUser,
+        firstName,
+        lastName,
+        phoneNumber,
+        city,
+        address
+    })
+    newUser.save((err, user) => {
+        if (err) {
+            return err
+        }
+        res.json({ idOfUser, firstName, lastName, phoneNumber, city, address })
+    })
+    idOfUser++
 })
 
 app.listen(4000, () => {

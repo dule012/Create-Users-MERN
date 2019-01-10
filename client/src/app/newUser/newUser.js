@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { saveUser, changeInputValue } from '../actions/mainActions'
+import { saveUser, changeInputValue, resetInputs } from '../actions/mainActions'
 import { connect } from 'react-redux';
 
 
@@ -8,10 +8,33 @@ class NewUser extends Component {
     submit = () => {
         const firstName = this.props.firstNameValue
         const lastName = this.props.lastNameValue
-        const phoneNumber = parseInt(this.props.phoneNumberValue)
+        const phoneNumber = isNaN(parseInt(this.props.phoneNumberValue)) === true ? '' : parseInt(this.props.phoneNumberValue)
         const city = this.props.cityValue
         const address = this.props.addressValue
-        this.props.saveUser(firstName, lastName, phoneNumber, city, address)
+
+        if (firstName === '' && lastName === '' && phoneNumber === true && city === '' && address === '') {
+            return
+        }
+
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                phoneNumber,
+                city,
+                address
+            })
+        }
+        fetch('/newuser', options)
+            .then((response) => {
+                this.props.resetInputs()
+                return response.json()
+            }).then((response) => {
+                console.log(response)
+                this.props.saveUser(response.idOfUser, response.firstName, response.lastName, phoneNumber, city, address)
+            })
         console.log(this.props)
     }
     typing = (e) => {
@@ -40,8 +63,9 @@ class NewUser extends Component {
 
 
 const mapDispatchToProps = (dispatch) => ({
-    saveUser: (firstName, lastName, phoneNumber, city, address) => { dispatch(saveUser(firstName, lastName, phoneNumber, city, address)) },
-    changeInputValue: (key, value) => { dispatch(changeInputValue(key, value)) }
+    saveUser: (idOfUser, firstName, lastName, phoneNumber, city, address) => { dispatch(saveUser(idOfUser, firstName, lastName, phoneNumber, city, address)) },
+    changeInputValue: (key, value) => { dispatch(changeInputValue(key, value)) },
+    resetInputs: () => { dispatch(resetInputs()) }
 })
 const mapStateToProps = (state) => ({ ...state })
 
