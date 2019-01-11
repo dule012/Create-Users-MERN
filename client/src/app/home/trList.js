@@ -5,7 +5,7 @@ const TrList = (props) => {
     return (
         <React.Fragment>
             {props.arr.map((el, i) => {
-                return <Tr arr={el} key={i} />
+                return <Tr action={props.action} arr={el} posInArr={i} key={i} />
             })}
         </React.Fragment>
     )
