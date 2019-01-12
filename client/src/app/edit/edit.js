@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { userToEdit, updateUser, resetInputs, changeInputValue } from '../actions/mainActions'
 
 class Edit extends Component {
     componentDidMount() {
@@ -8,10 +9,37 @@ class Edit extends Component {
                 return response.json()
             })
             .then((response) => {
-
+                this.props.userToEdit(response.firstName, response.lastName, response.phoneNumber, response.city, response.address)
             })
     }
+    submit = () => {
+        const firstName = this.props.firstNameValueEdit
+        const lastName = this.props.lastNameValueEdit
+        const phoneNumber = this.props.phoneNumberValueEdit
+        const city = this.props.cityValueEdit
+        const address = this.props.addressValueEdit
 
+        const options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                phoneNumber,
+                city,
+                address
+            })
+        }
+        fetch(`/edit/${this.props.match.params.id}`, options)
+            .then((response) => {
+                this.props.resetInputs()
+                return response.json()
+            })
+            .then((response) => {
+                console.log(response)
+                this.props.updateUser(response.idOfUser, response.firstName, response.lastName, response.phoneNumber, response.city, response.address)
+            })
+    }
     typing = (e) => {
         this.props.changeInputValue(e.target.name, e.target.value)
     }
@@ -35,5 +63,12 @@ class Edit extends Component {
         )
     }
 }
+const mapDispatchToProps = (dispatch) => ({
+    userToEdit: (firstName, lastName, phoneNumber, city, address) => { dispatch(userToEdit(firstName, lastName, phoneNumber, city, address)) },
+    resetInputs: () => { dispatch(resetInputs()) },
+    changeInputValue: (key, value) => { dispatch(changeInputValue(key, value)) },
+    updateUser: (idOfUser, firstName, lastName, phoneNumber, city, address) => { dispatch(updateUser(idOfUser, firstName, lastName, phoneNumber, city, address)) }
+})
+const mapStateToProps = (state) => ({ ...state })
 
-export default Edit
+export default connect(mapStateToProps, mapDispatchToProps)(Edit)

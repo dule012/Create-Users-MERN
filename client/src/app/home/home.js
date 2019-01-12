@@ -5,27 +5,28 @@ import { connect } from 'react-redux';
 import { saveUser, deleteUser } from '../actions/mainActions'
 
 class Home extends Component {
-    // componentDidMount() {
-    //     fetch('/')
-    //         .then((response) => {
-    //             return response.json()
-    //         })
-    //         .then((response) => {
-    //             response.forEach((obj, i) => {
-    //                 this.props.saveUser(obj.idOfUser, obj.firstName, obj.lastName, obj.phoneNumber, obj.city, obj.address)
-    //             })
-    //         })
-    // }
-    
+    componentDidMount() {
+        if (this.props.arrOfUsers.length === 0) {
+            fetch('/home')
+                .then((response) => {
+                    return response.json()
+                })
+                .then((response) => {
+                    response.forEach((el, i) => {
+                        this.props.saveUser(el.idOfUser, el.firstName, el.lastName, el.phoneNumber, el.city, el.address)
+                    })
+                })
+        }
+    }
     deleteOnClick = (i) => {
         const options = {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idOfUser: this.props.arrOfUsers[i][0] })
         }
-        fetch('/', options)
-        .then((response) => {
-            this.props.deleteUser(i)
+        fetch('/home', options)
+            .then((response) => {
+                this.props.deleteUser(i)
             })
 
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Home from './home/home'
 import NewUser from './newUser/newUser'
 import Header from './partials/header'
@@ -14,7 +14,8 @@ class App extends Component {
         <Switch>
           <Route path='/newuser' component={NewUser} />
           <Route path='/edit/:id' component={Edit} />
-          <Route path='/' component={Home} />
+          <Route path='/home' component={Home} />
+          <Route path='/' render={() => <Redirect to={'/home'} />} />
         </Switch>
       </React.Fragment>
     )

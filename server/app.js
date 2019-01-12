@@ -20,7 +20,7 @@ app.use(cors())
 
 
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     User.find({}, (err, users) => {
         // if (err) {
         //     res.sendStatus(500)
@@ -30,17 +30,16 @@ app.get('/', (req, res) => {
     })
 })
 
-app.delete('/', (req, res) => {
-    console.log(req.body)
+app.delete('/home', (req, res) => {
     const { idOfUser } = req.body
     //Obrisi
     // res.json({ idOfUser, text: 'deleted user' })
     User.findOneAndDelete({ idOfUser: idOfUser }, (err, doc) => {
-        if (err) {
-            res.send('Server error').status(500)
-            return err
-        }
-        res.json({ idOfUser })
+        // if (err) {
+        //     res.send('Server error').status(500)
+        //     return err
+        // }
+        res.json({ text: 'deleted user' })
     })
 })
 
@@ -57,14 +56,18 @@ app.post('/newuser', (req, res) => {
     })
     //Obrisi
     // res.json({ idOfUser, firstName, lastName, phoneNumber, city, address })
-    newUser.save((err, user) => {
+    newUser.save((err) => {
         // if (err) {
         //     res.sendStatus(500)
         //     return err
         // }
+        console.log(err)
         res.json({ idOfUser, firstName, lastName, phoneNumber, city, address })
+        idOfUser++
     })
-    idOfUser++
+    // User.findOne({ idOfUser: idOfUser }, (err, user) => {
+    //     console.log(user)
+    // })
 })
 
 app.get('/edit/:id', (req, res) => {
@@ -77,10 +80,20 @@ app.get('/edit/:id', (req, res) => {
         res.json(user)
     })
 })
-app.put('/edit/:id',(req,res)=>{
+app.put('/edit/:id', (req, res) => {
     const id = req.params.id
-    
+    const { firstName, lastName, phoneNumber, city, address } = req.body
+    User.findOneAndUpdate({ idOfUser: id }, { $set: { firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, city: city, address: address } }, { new: true }, (err, user) => {
+        // if (err) {
+        //     res.sendStatus(500)
+        //     return err
+        // }
+        console.log(user)
+        res.json({ idOfUser: user.idOfUser, firstName: user.firstName, lastName: user.lastName, phoneNumber: user.phoneNumber, city: user.city, address: user.address, text: 'updated user' })
+    })
 })
+
+
 app.listen(5000, () => {
     console.log('server listening')
 })
