@@ -15,7 +15,7 @@ class App extends Component {
           <Route path='/newuser' component={NewUser} />
           <Route path='/edit/:id' component={Edit} />
           <Route path='/home' component={Home} />
-          <Route path='/' render={() => <Redirect to={'/home'} />} />
+          <Route path='*' render={() => <Redirect to={'/home'} />} />
         </Switch>
       </React.Fragment>
     )
